@@ -226,14 +226,16 @@ h1, h2, h3, h4, h5, h6 {
 }
 */
 
+#header .navbar-brand {
+    padding: 0;
+}
+
+
 #header .navbar-brand > img {
     height: 100%;
     width: auto;
 }
 
-#header .navbar-brand {
-    padding: 0;
-}
 
 @media screen and (max-width: 992px) {
     #header .navbar-brand {

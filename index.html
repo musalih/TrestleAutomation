@@ -644,15 +644,15 @@
                 <form class="contact-form">
                     <div class="form-group">
                         <label for="name" class="sr-only">Name</label>
-                        <input type="name" class="form-control" id="name" placeholder="Name">
+                        <input type="name" class="form-control" id="name" required data-validation-required-message="Please enter your name." placeholder="Name">
                     </div>
                     <div class="form-group">
                         <label for="email" class="sr-only">Email</label>
-                        <input type="email" class="form-control" id="email" placeholder="Email">
+                        <input type="email" class="form-control" id="email" required data-validation-required-message="Please enter your email address." placeholder="Email">
                     </div>
                     <div class="form-group">
                         <label for="message" class="sr-only">Message</label>
-                        <textarea class="form-control" id="message" rows="7" placeholder="Message"></textarea>
+                        <textarea class="form-control" id="message" rows="7" required data-validation-required-message="Please enter a message." placeholder="Message"></textarea>
                     </div>
                     <div class="form-group">
                         <input type="submit" id="btn-submit" class="btn btn-send-message btn-md" value="Send Message">

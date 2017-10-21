@@ -641,7 +641,7 @@
             </div>
             <div class="col-md-4 to-animate">
                 <h3 class="section-title">Drop us a line</h3>
-                <form class="contact-form">
+                <form class="contact-form" id="contactForm">
                     <div class="form-group">
                         <label for="name" class="sr-only">Name</label>
                         <input type="name" class="form-control" id="name" required data-validation-required-message="Please enter your name." placeholder="Name">
@@ -655,7 +655,7 @@
                         <textarea class="form-control" id="message" rows="7" required data-validation-required-message="Please enter a message." placeholder="Message"></textarea>
                     </div>
                     <div class="form-group">
-                        <input type="submit" id="btn-submit" class="btn btn-send-message btn-md" value="Send Message">
+                        <input type="submit" id="btn-submit" class="btn btn-send-message btn-md" id="sendMessageButton" value="Send Message">
                     </div>
                 </form>
             </div>
@@ -690,7 +690,10 @@
 <!-- Main JS (Do not remove) -->
 <script src="js/main.js"></script>
 
-<script src="js/threesixty.min.js"></script>
+<!-- Custom contact me form files -->
+<script src="js/jqBootstrapValidation.js"></script>
+<script src="js/contact_me.js"></script>
+
 
 </body>
 </html>

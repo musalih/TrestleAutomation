@@ -1,24 +1,42 @@
 <?php
-// Check for empty fields
-if(empty($_POST['name'])  		||
-   empty($_POST['email']) 		||
-   empty($_POST['message'])	||
-   !filter_var($_POST['email'],FILTER_VALIDATE_EMAIL))
-   {
-	echo "No arguments Provided!";
-	return false;
-   }
+// Variables
+$name = trim($_POST['name']);
+$email = trim($_POST['email']);
+$message = trim($_POST['message']);
+
+// Email address validation - works with php 5.2+
+function is_email_valid($email) {
+	return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+
+if( isset($name) && isset($email) && isset($message) && is_email_valid($email) ) {
+
+	// Avoid Email Injection and Mail Form Script Hijacking
+	$pattern = "/(content-type|bcc:|cc:|to:)/i";
+	if( preg_match($pattern, $name) || preg_match($pattern, $email) || preg_match($pattern, $message) || preg_match($pattern, $subject) ) {
+		exit;
+	}
+
+	// Email will be send
+	$to = "support@trestleautomation.com";  // Change with your email address
+	$subject = "$name from Trestle Automation"; // Here Change with your default subject
+
+	// HTML Elements for Email Body
+	$body = <<<EOD
+	<strong>Name:</strong> $name <br>
+	<strong>Email:</strong> <a href="mailto:$email?subject=feedback" "email me">$email</a> <br> <br>
+	<strong>Message:</strong> $message <br>
+EOD;
+//Must end on first column
 	
-$name = strip_tags(htmlspecialchars($_POST['name']));
-$email_address = strip_tags(htmlspecialchars($_POST['email']));
-$message = strip_tags(htmlspecialchars($_POST['message']));
-	
-// Create the email and send the message
-$to = 'support@trestleautomation.com'; // Add your email address inbetween the '' replacing yourname@yourdomain.com - This is where the form will send a message to.
-$email_subject = "Website Contact Form:  $name";
-$email_body = "You have received a new message from your website contact form.\n\n"."Here are the details:\n\nName: $name\n\nEmail: $email_address\n\nPhone: $phone\n\nMessage:\n$message";
-$headers = "From: noreply@trestleautomation.com\n"; // This is the email address the generated message will be from. We recommend using something like noreply@yourdomain.com.
-$headers .= "Reply-To: $email_address";	
-mail($to,$email_subject,$email_body,$headers);
-return true;			
+	$headers = "From: $name <$email>\r\n";
+	$headers .= 'MIME-Version: 1.0' . "\r\n";
+	$headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+
+	// PHP email sender
+	mail($to, $subject, $body, $headers);
+}
+
+
 ?>

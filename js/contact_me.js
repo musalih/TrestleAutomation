@@ -1,33 +1,73 @@
-function isValidEmail(emailAddress) {
+$(function() {
 
-    var pattern = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+  $("#contactForm input,#contactForm textarea").jqBootstrapValidation({
+    preventSubmit: true,
+    submitError: function($form, event, errors) {
+      // additional error messages or events
+    },
+    submitSuccess: function($form, event) {
+      event.preventDefault(); // prevent default submit behaviour
+      // get values from FORM
+      var name = $("input#name").val();
+      var email = $("input#email").val();
+      var message = $("textarea#message").val();
+      var firstName = name; // For Success/Failure Message
+      // Check for white space in name for Success/Fail message
+      if (firstName.indexOf(' ') >= 0) {
+        firstName = name.split(' ').slice(0, -1).join(' ');
+      }
+      $this = $("#sendMessageButton");
+      $this.prop("disabled", true); // Disable submit button until AJAX call is complete to prevent duplicate messages
+      $.ajax({
+        url: "././mail/contact_me.php",
+        type: "POST",
+        data: {
+          name: name,
+          email: email,
+          message: message
+        },
+        cache: false,
+        success: function() {
+          // Success message
+          $('#success').html("<div class='alert alert-success'>");
+          $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+            .append("</button>");
+          $('#success > .alert-success')
+            .append("<strong>Your message has been sent. </strong>");
+          $('#success > .alert-success')
+            .append('</div>');
+          //clear all fields
+          $('#contactForm').trigger("reset");
+        },
+        error: function() {
+          // Fail message
+          $('#success').html("<div class='alert alert-danger'>");
+          $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+            .append("</button>");
+          $('#success > .alert-danger').append($("<strong>").text("Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!"));
+          $('#success > .alert-danger').append('</div>');
+          //clear all fields
+          $('#contactForm').trigger("reset");
+        },
+        complete: function() {
+          setTimeout(function() {
+            $this.prop("disabled", false); // Re-enable submit button when AJAX call is complete
+          }, 1000);
+        }
+      });
+    },
+    filter: function() {
+      return $(this).is(":visible");
+    },
+  });
 
-    return pattern.test(emailAddress);
-
-}
-
-$("#contactForm").submit(function(e) {
+  $("a[data-toggle=\"tab\"]").click(function(e) {
     e.preventDefault();
-    var data = {
-        name: $("#name").val(),
-        email: $("#email").val(),
-        message: $("#message").val(),
-    };
+    $(this).tab("show");
+  });
+});
 
-    if ( isValidEmail(data['email']) && (data['message'].length > 1) && (data['name'].length > 1) ) {
-        $.ajax({
-            type: "POST",
-            url: "assets/php/sendmail.php",
-            data: data,
-            success: function() {
-                $('.email-success').delay(500).fadeIn(1000);
-                $('.email-failed').fadeOut(500);
-            }
-        });
-    } else {
-        $('.email-failed').delay(500).fadeIn(1000);
-        $('.email-success').fadeOut(500);
-    }
-
-    return false;
+/*When clicking on Full hide fail/success boxes */
+$('#name').focus(function() {
+  $('#success').html('');
 });

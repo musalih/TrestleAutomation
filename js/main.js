@@ -44,6 +44,16 @@ $(document).ready(function() {
     };
 
 
+//adds active class to nav
+(function($) {
+    
+    "use strict";
+    
+    $('body').attr('data-spy', 'scroll').attr('data-target', '.navbar-fixed-top').attr('data-offset', '11');
+
+})(jQuery);
+
+
 
 //parallax mobile fix
 if (Modernizr.touch && ($('#header').attr('data-stellar-background-ratio') !== undefined)) {

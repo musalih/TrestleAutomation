@@ -647,7 +647,10 @@ p {
 }
 
 
-
+.is-scrolling .navbar-nav>.active>a, .is-scrolling .navbar-nav>.active>a:hover, .is-scrolling .navbar-nav>.active>a:focus {
+    color: #1fb5f5;
+    background-color: transparent;
+}
 
 
 
